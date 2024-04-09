@@ -1,7 +1,10 @@
 from flask_mysqldb import MySQL
 import collections
-from flask import Flask, render_template, flash, request, send_file, redirect, url_for
+from flask import Flask, render_template, flash, request, redirect, url_for
 from markupsafe import Markup
+import flask
+from pathlib import Path
+
 QUESTION_INDEX = 2
 
 app = Flask(__name__)
@@ -407,7 +410,7 @@ def retrieve():
             my_file.write(output_file)
             my_file.close()
             save_these = {}
-            return send_file('exported_questions.txt', as_attachment=True)
+            return flask.send_from_directory((p := Path('exported_questions.txt')).parent, p.name, as_attachment=True)
 
 
 @app.route('/templates/landing_page.html')
