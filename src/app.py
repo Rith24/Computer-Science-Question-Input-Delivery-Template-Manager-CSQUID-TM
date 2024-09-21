@@ -49,10 +49,8 @@ def store():
 
         if x == "Upload File":
             table_output = []
-            clean_list = []
             upload = request.files['file']
             file_extension = upload.filename.split('.').pop()
-            contents = []
             if file_extension == "txt":
                 read_strings = upload.readlines()
                 for read_string in read_strings:
@@ -65,8 +63,8 @@ def store():
             if table_output:
                 for q in table_output:
                     query = "INSERT INTO question_templates(category, subcategory, template_string, avg_grade, difficulty, course, language) " \
-                            " VALUES(0, 0, '" + q + "', 0, '-', 0, 0)"
-                    cursor.execute(query)
+                            " VALUES(0, 0, ?" + ", 0, '-', 0, 0)"
+                    cursor.execute(query, (q, ))
                 mysql.connection.commit()
             return render_template('store_page.html', results=table_output)
         elif x == "Upload Single Question":
